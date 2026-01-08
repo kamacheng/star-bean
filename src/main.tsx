@@ -1436,6 +1436,20 @@ const StatisticsPanel = () => {
         consumable: '消耗品'
     };
 
+    // 新增：按来源（初级/中级/高级）分布
+    const distributionBySource = (['beginner', 'intermediate', 'advanced'] as WheelType[]).map(w => {
+        const amount = filteredOutputs
+            .filter(item => item.wheel === w)
+            .reduce((sum, item) => sum + item.quantity, 0);
+        return { source: w, amount };
+    });
+    const maxSourceDistribution = Math.max(1, ...distributionBySource.map(d => d.amount));
+    const wheelLabel: Record<WheelType, string> = {
+        beginner: '初级',
+        intermediate: '中级',
+        advanced: '高级'
+    };
+
     return (
         <div className="space-y-6">
             {/* Filter Section */}
@@ -1602,6 +1616,25 @@ const StatisticsPanel = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {/* 新增图表：奖励来源分布（初级/中级/高级） */}
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <h3 className="text-lg font-bold text-gray-800 mb-6">奖励来源分布（初级/中级/高级）</h3>
+                    <div className="grid grid-cols-3 gap-4 h-56 items-end">
+                        {distributionBySource.map(item => (
+                            <div key={item.source} className="flex flex-col items-center gap-2">
+                                <div
+                                    className="w-full min-w-16 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-md flex items-end justify-center text-xs text-white font-semibold shadow-sm"
+                                    style={{ height: `${(item.amount / maxSourceDistribution) * 100}%` }}
+                                >
+                                    <span className="pb-2">{item.amount}</span>
+                                </div>
+                                <span className="text-sm text-gray-600">{wheelLabel[item.source as WheelType]}</span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="mt-3 text-xs text-gray-500">基于当前筛选统计 · 总数量 {totalRewardQuantity}</div>
                 </div>
             </div>
 
