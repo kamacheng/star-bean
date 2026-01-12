@@ -675,14 +675,9 @@ const ActivityList = ({ onEdit, onCreate, showToast }: { onEdit: (act: ActivityC
                                         <td className="px-6 py-4 text-right">
                                             <button
                                                 onClick={() => onEdit(act)}
-                                                disabled={status.label === '已结束'}
-                                                className={`font-medium text-sm px-3 py-1 rounded transition-colors ${status.label === '已结束'
-                                                    ? 'text-gray-400 cursor-not-allowed'
-                                                    : 'text-blue-600 hover:text-blue-800 hover:bg-blue-50'
-                                                    }`}
-                                                title={status.label === '已结束' ? '已结束的活动不可编辑' : ''}
+                                                className="font-medium text-sm px-3 py-1 rounded transition-colors text-blue-600 hover:text-blue-800 hover:bg-blue-50"
                                             >
-                                                编辑配置
+                                                {status.label === '已结束' ? '查看' : '编辑配置'}
                                             </button>
                                         </td>
                                     </tr>
@@ -706,7 +701,7 @@ const ActivityList = ({ onEdit, onCreate, showToast }: { onEdit: (act: ActivityC
 };
 
 // WheelEditor Component
-const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig) => void }> = ({ wheel, onChange }) => {
+const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig) => void; isReadOnly?: boolean }> = ({ wheel, onChange, isReadOnly = false }) => {
     // 确保大奖始终排在第一位
     const sortedRewards = [...wheel.rewards].sort((a, b) => {
         if (a.id === wheel.grandPrizeId) return -1;
@@ -799,7 +794,8 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
                         <select
                             value={wheel.grandPrizeId || ''}
                             onChange={(e) => handleGrandPrizeChange(e.target.value)}
-                            className="bg-white border border-gray-300 text-sm rounded px-2 py-1 outline-none focus:border-blue-500"
+                            disabled={isReadOnly}
+                            className={`bg-white border border-gray-300 text-sm rounded px-2 py-1 outline-none ${isReadOnly ? 'cursor-not-allowed bg-gray-50' : 'focus:border-blue-500'}`}
                         >
                             <option value="">未选择</option>
                             {wheel.rewards.map(r => (
@@ -807,21 +803,25 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
                             ))}
                         </select>
                     </div>
-                    <button
-                        onClick={addReward}
-                        disabled={wheel.rewards.length >= wheel.maxRewards}
-                        className={`text-xs px-3 py-1.5 rounded border transition-colors ${wheel.rewards.length >= wheel.maxRewards ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border-blue-600 text-blue-600 hover:bg-blue-50'}`}
-                    >
-                        + 添加奖励
-                    </button>
-                    {(wheel.type === 'beginner' || wheel.type === 'intermediate') && (
-                        <button
-                            onClick={addUpgradeReward}
-                            disabled={wheel.rewards.length >= wheel.maxRewards}
-                            className={`text-xs px-3 py-1.5 rounded border transition-colors ${wheel.rewards.length >= wheel.maxRewards ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border-green-600 text-green-600 hover:bg-green-50'}`}
-                        >
-                            + 添加升级道具
-                        </button>
+                    {!isReadOnly && (
+                        <>
+                            <button
+                                onClick={addReward}
+                                disabled={wheel.rewards.length >= wheel.maxRewards}
+                                className={`text-xs px-3 py-1.5 rounded border transition-colors ${wheel.rewards.length >= wheel.maxRewards ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border-blue-600 text-blue-600 hover:bg-blue-50'}`}
+                            >
+                                + 添加奖励
+                            </button>
+                            {(wheel.type === 'beginner' || wheel.type === 'intermediate') && (
+                                <button
+                                    onClick={addUpgradeReward}
+                                    disabled={wheel.rewards.length >= wheel.maxRewards}
+                                    className={`text-xs px-3 py-1.5 rounded border transition-colors ${wheel.rewards.length >= wheel.maxRewards ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border-green-600 text-green-600 hover:bg-green-50'}`}
+                                >
+                                    + 添加升级道具
+                                </button>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
@@ -847,14 +847,16 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
                                             placeholder="道具ID"
                                             value={reward.itemId}
                                             onChange={(e) => updateReward(idx, 'itemId', e.target.value)}
-                                            className="border-b border-transparent focus:border-blue-500 outline-none bg-transparent mb-1 text-xs font-mono text-gray-500"
+                                            disabled={isReadOnly}
+                                            className={`border-b outline-none bg-transparent mb-1 text-xs font-mono text-gray-500 ${isReadOnly ? 'border-transparent cursor-not-allowed' : 'border-transparent focus:border-blue-500'}`}
                                         />
                                         <input
                                             type="text"
                                             placeholder="道具名称(模拟)"
                                             value={reward.itemName}
                                             onChange={(e) => updateReward(idx, 'itemName', e.target.value)}
-                                            className="border-b border-transparent focus:border-blue-500 outline-none bg-transparent font-medium text-gray-800"
+                                            disabled={isReadOnly}
+                                            className={`border-b outline-none bg-transparent font-medium text-gray-800 ${isReadOnly ? 'border-transparent cursor-not-allowed' : 'border-transparent focus:border-blue-500'}`}
                                         />
                                         {wheel.grandPrizeId === reward.id && <span className="text-[10px] text-yellow-600 font-bold uppercase tracking-wider mt-1">👑 大奖</span>}
                                     </div>
@@ -864,7 +866,8 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
                                         type="number"
                                         value={reward.count}
                                         onChange={(e) => updateReward(idx, 'count', parseInt(e.target.value) || 0)}
-                                        className="w-16 text-center border rounded py-1 focus:ring-1 focus:ring-blue-500 outline-none"
+                                        disabled={isReadOnly}
+                                        className={`w-16 text-center border rounded py-1 outline-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-1 focus:ring-blue-500'}`}
                                     />
                                 </td>
                                 <td className="px-4 py-2 text-center">
@@ -872,34 +875,37 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
                                         type="number"
                                         value={reward.weight}
                                         onChange={(e) => updateReward(idx, 'weight', parseInt(e.target.value) || 0)}
-                                        className="w-16 text-center border rounded py-1 focus:ring-1 focus:ring-blue-500 outline-none"
+                                        disabled={isReadOnly}
+                                        className={`w-16 text-center border rounded py-1 outline-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-1 focus:ring-blue-500'}`}
                                     />
                                 </td>
                                 <td className="px-4 py-2 text-center text-gray-500">
                                     {totalWeight > 0 ? ((reward.weight / totalWeight) * 100).toFixed(2) : 0}%
                                 </td>
                                 <td className="px-4 py-2 text-right">
-                                    <div className="flex items-center gap-1">
-                                        <button
-                                            onClick={() => moveRewardUp(idx)}
-                                            disabled={idx === 0 || wheel.grandPrizeId === reward.id}
-                                            className={`p-1 rounded ${idx === 0 || wheel.grandPrizeId === reward.id ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-blue-500'}`}
-                                            title="上移"
-                                        >
-                                            ↑
-                                        </button>
-                                        <button
-                                            onClick={() => moveRewardDown(idx)}
-                                            disabled={idx === sortedRewards.length - 1 || wheel.grandPrizeId === reward.id}
-                                            className={`p-1 rounded ${idx === sortedRewards.length - 1 || wheel.grandPrizeId === reward.id ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-blue-500'}`}
-                                            title="下移"
-                                        >
-                                            ↓
-                                        </button>
-                                        <button onClick={() => removeReward(idx)} className="text-gray-400 hover:text-red-500">
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
+                                    {!isReadOnly && (
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => moveRewardUp(idx)}
+                                                disabled={idx === 0 || wheel.grandPrizeId === reward.id}
+                                                className={`p-1 rounded ${idx === 0 || wheel.grandPrizeId === reward.id ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-blue-500'}`}
+                                                title="上移"
+                                            >
+                                                ↑
+                                            </button>
+                                            <button
+                                                onClick={() => moveRewardDown(idx)}
+                                                disabled={idx === sortedRewards.length - 1 || wheel.grandPrizeId === reward.id}
+                                                className={`p-1 rounded ${idx === sortedRewards.length - 1 || wheel.grandPrizeId === reward.id ? 'text-gray-300 cursor-not-allowed' : 'text-gray-400 hover:text-blue-500'}`}
+                                                title="下移"
+                                            >
+                                                ↓
+                                            </button>
+                                            <button onClick={() => removeReward(idx)} className="text-gray-400 hover:text-red-500">
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -915,7 +921,7 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
     );
 };
 
-const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
+const ActivityEditor = ({ initialData, onSave, onCancel, showToast, isReadOnly = false }: any) => {
     const [data, setData] = useState<ActivityConfig>(initialData || {
         id: `ACT_${new Date().getFullYear()}${Math.floor(Math.random() * 10000)}`,
         startTime: '',
@@ -992,8 +998,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
             {/* Header */}
             <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                 <div>
-                    <h2 className="text-lg font-bold text-gray-800">{initialData ? '编辑轮盘' : '新建轮盘'}</h2>
-                    <p className="text-xs text-gray-500 font-mono mt-1">轮盘ID: {data.id}</p>
+                    <h2 className="text-lg font-bold text-gray-800">{isReadOnly ? '查看轮盘' : (initialData ? '编辑轮盘' : '新建轮盘')}</h2>
+                    <p className="text-xs text-gray-500 font-mono mt-1">轮盘ID: {data.id}{isReadOnly && <span className="ml-2 text-yellow-600 bg-yellow-50 px-2 py-0.5 rounded text-[10px] font-semibold">只读模式</span>}</p>
                 </div>
                 <div className="flex gap-3 items-center">
                     <input ref={importRef} type="file" accept="application/json" className="hidden" onChange={handleImportFile} />
@@ -1005,14 +1011,17 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                     </button>
                     <button
                         onClick={handleImportClick}
-                        className="px-3 py-2 text-sm border border-blue-200 rounded-lg text-blue-600 hover:bg-blue-50"
+                        disabled={isReadOnly}
+                        className={`px-3 py-2 text-sm border rounded-lg ${isReadOnly ? 'border-gray-200 text-gray-400 cursor-not-allowed bg-gray-50' : 'border-blue-200 text-blue-600 hover:bg-blue-50'}`}
                     >
                         导入配置
                     </button>
-                    <button onClick={onCancel} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">取消</button>
-                    <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium flex items-center gap-2">
-                        <Save size={16} /> 保存配置
-                    </button>
+                    <button onClick={onCancel} className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">{isReadOnly ? '关闭' : '取消'}</button>
+                    {!isReadOnly && (
+                        <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium flex items-center gap-2">
+                            <Save size={16} /> 保存配置
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -1027,7 +1036,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                                 type="datetime-local" // Simplified for demo
                                 value={data.startTime.replace(' ', 'T')}
                                 onChange={(e) => setData({ ...data, startTime: e.target.value.replace('T', ' ') })}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                disabled={isReadOnly}
+                                className={`w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                             />
                         </div>
                     </div>
@@ -1039,7 +1049,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                                 type="datetime-local"
                                 value={data.endTime.replace(' ', 'T')}
                                 onChange={(e) => setData({ ...data, endTime: e.target.value.replace('T', ' ') })}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                                disabled={isReadOnly}
+                                className={`w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                             />
                         </div>
                     </div>
@@ -1053,7 +1064,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                         onChange={(e) => setData({ ...data, remarks: e.target.value })}
                         placeholder="输入活动备注，方便阅读和管理"
                         rows={2}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                        disabled={isReadOnly}
+                        className={`w-full px-4 py-2 border border-gray-200 rounded-lg outline-none resize-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                     />
                     <p className="text-xs text-gray-400 mt-1">可选字段，用于描述活动的目的、规则说明等</p>
                 </div>
@@ -1097,7 +1109,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                                 onChange={(e) => setData({ ...data, rulesZhCN: e.target.value })}
                                 placeholder="输入活动规则（简体中文）"
                                 rows={5}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                disabled={isReadOnly}
+                                className={`w-full px-4 py-3 border border-gray-200 rounded-lg outline-none resize-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                             />
                         )}
                         {activeLangTab === 'zh-TW' && (
@@ -1106,7 +1119,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                                 onChange={(e) => setData({ ...data, rulesZhTW: e.target.value })}
                                 placeholder="輸入活動規則（繁體中文）"
                                 rows={5}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                disabled={isReadOnly}
+                                className={`w-full px-4 py-3 border border-gray-200 rounded-lg outline-none resize-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                             />
                         )}
                         {activeLangTab === 'ja' && (
@@ -1115,7 +1129,8 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                                 onChange={(e) => setData({ ...data, rulesJA: e.target.value })}
                                 placeholder="アクティビティルール（日本語）を入力してください"
                                 rows={5}
-                                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                                disabled={isReadOnly}
+                                className={`w-full px-4 py-3 border border-gray-200 rounded-lg outline-none resize-none ${isReadOnly ? 'bg-gray-50 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500'}`}
                             />
                         )}
                     </div>
@@ -1145,6 +1160,7 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast }: any) => {
                             ...data,
                             wheels: { ...data.wheels, [activeTab]: updatedWheel }
                         })}
+                        isReadOnly={isReadOnly}
                     />
                 </div>
             </div>
@@ -1411,30 +1427,15 @@ const DataQueryPanel = () => {
  */
 const StatisticsPanel = () => {
     const [selectedWheelId, setSelectedWheelId] = useState<string>('all');
-    const [rewardFilter, setRewardFilter] = useState<'all' | RewardType>('all');
     const [showRewardModal, setShowRewardModal] = useState(false);
+    const [trendTimeRange, setTrendTimeRange] = useState<'7d' | '30d' | '90d'>('7d');
+    const [viewMode, setViewMode] = useState<'activity' | 'reward'>('activity');
+    const [expandedDetail, setExpandedDetail] = useState<{ activityId: string; type: RewardType } | null>(null);
 
     const filteredOutputs = MOCK_REWARD_OUTPUTS.filter(item => {
         const matchActivity = selectedWheelId === 'all' || item.activityId === selectedWheelId;
-        const matchType = rewardFilter === 'all' || item.rewardType === rewardFilter;
-        return matchActivity && matchType;
+        return matchActivity;
     });
-
-    const totalRewardQuantity = filteredOutputs.reduce((sum, item) => sum + item.quantity, 0);
-    const distributionByType = (['currency', 'skin', 'clothing', 'consumable'] as RewardType[]).map(type => {
-        const amount = filteredOutputs
-            .filter(item => item.rewardType === type)
-            .reduce((sum, item) => sum + item.quantity, 0);
-        return { type, amount };
-    });
-    const maxDistribution = Math.max(1, ...distributionByType.map(d => d.amount));
-
-    const rewardTypeLabel: Record<RewardType, string> = {
-        currency: '货币',
-        skin: '装扮',
-        clothing: '服饰',
-        consumable: '消耗品'
-    };
 
     // 新增：按来源（初级/中级/高级）分布
     const distributionBySource = (['beginner', 'intermediate', 'advanced'] as WheelType[]).map(w => {
@@ -1443,7 +1444,6 @@ const StatisticsPanel = () => {
             .reduce((sum, item) => sum + item.quantity, 0);
         return { source: w, amount };
     });
-    const maxSourceDistribution = Math.max(1, ...distributionBySource.map(d => d.amount));
     const wheelLabel: Record<WheelType, string> = {
         beginner: '初级',
         intermediate: '中级',
@@ -1489,17 +1489,14 @@ const StatisticsPanel = () => {
                         <span className="bg-blue-100 px-1.5 py-0.5 rounded mr-1">-</span> 平均 2.8/人
                     </div>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => { setRewardFilter('all'); setShowRewardModal(true); }}
-                    className="text-left bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:border-blue-200 hover:shadow-md transition-all"
+                <div
+                    className="text-left bg-white p-5 rounded-xl border border-gray-100 shadow-sm"
                 >
                     <div className="text-sm text-gray-500 mb-1 flex items-center gap-2">
                         <span>奖励发放数</span>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600">可点击</span>
                     </div>
                     <div className="text-2xl font-bold text-gray-800">{selectedWheelId === 'all' ? '512,040' : '156,320'}</div>
-                </button>
+                </div>
                 <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
                     <div className="text-sm text-gray-500 mb-1">星豆回收量</div>
                     <div className="text-2xl font-bold text-yellow-600">{selectedWheelId === 'all' ? '8,900,000' : '2,345,600'}</div>
@@ -1507,32 +1504,200 @@ const StatisticsPanel = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Simulated Chart 1 */}
+                {/* Simulated Chart 1 - Line Chart */}
                 <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h3 className="text-lg font-bold text-gray-800 mb-6">参与趋势 (近7日) {selectedWheelId !== 'all' && `- ${selectedWheelId}`}</h3>
-                    <div className="h-64 flex items-end justify-between gap-3 px-2 border-b border-l border-gray-200 pb-2 pl-2">
-                        {[
-                            { date: '01-01', count: 8420, height: 110 },
-                            { date: '01-02', count: 9830, height: 140 },
-                            { date: '01-03', count: 7560, height: 95 },
-                            { date: '01-04', count: 12340, height: 180 },
-                            { date: '01-05', count: 10580, height: 155 },
-                            { date: '01-06', count: 15230, height: 220 },
-                            { date: '01-07', count: 11940, height: 170 }
-                        ].map((item, i) => (
-                            <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                                <div
-                                    className="relative w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t hover:from-blue-600 hover:to-blue-500 transition-all cursor-pointer shadow-sm"
-                                    style={{ height: `${item.height}px` }}
+                    <div className="flex items-center justify-between mb-6">
+                        <h3 className="text-lg font-bold text-gray-800">参与趋势 {selectedWheelId !== 'all' && `- ${selectedWheelId}`}</h3>
+                        <div className="flex gap-2">
+                            {[
+                                { value: '7d', label: '7天' },
+                                { value: '30d', label: '30天' },
+                                { value: '90d', label: '90天' }
+                            ].map(option => (
+                                <button
+                                    key={option.value}
+                                    onClick={() => setTrendTimeRange(option.value as '7d' | '30d' | '90d')}
+                                    className={`px-3 py-1 text-xs rounded-full transition ${trendTimeRange === option.value
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        }`}
                                 >
-                                    <div className="absolute -top-9 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                                        {item.count.toLocaleString()}次
-                                    </div>
-                                </div>
-                                <span className="text-xs text-gray-500 font-medium mt-1">{item.date}</span>
-                            </div>
-                        ))}
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
+
+                    {(() => {
+                        // 不同时间范围的数据
+                        const trendData = {
+                            '7d': [
+                                { date: '01-01', count: 8420 },
+                                { date: '01-02', count: 9830 },
+                                { date: '01-03', count: 7560 },
+                                { date: '01-04', count: 12340 },
+                                { date: '01-05', count: 10580 },
+                                { date: '01-06', count: 15230 },
+                                { date: '01-07', count: 11940 }
+                            ],
+                            '30d': [
+                                { date: '12-09', count: 5420 },
+                                { date: '12-12', count: 6830 },
+                                { date: '12-15', count: 7560 },
+                                { date: '12-18', count: 9340 },
+                                { date: '12-21', count: 11580 },
+                                { date: '12-24', count: 13230 },
+                                { date: '12-27', count: 14940 },
+                                { date: '12-30', count: 12340 }
+                            ],
+                            '90d': [
+                                { date: '10-11', count: 4200 },
+                                { date: '10-31', count: 6500 },
+                                { date: '11-20', count: 8900 },
+                                { date: '12-10', count: 11200 },
+                                { date: '12-30', count: 13800 }
+                            ]
+                        };
+
+                        const data = trendData[trendTimeRange];
+                        const maxCount = Math.max(...data.map(d => d.count));
+                        const chartHeight = 240;
+                        const chartWidth = 600;
+                        const paddingX = 30;
+                        const paddingY = 20;
+
+                        // 计算SVG坐标
+                        const points = data.map((item, i) => {
+                            const x = paddingX + (i / (data.length - 1)) * (chartWidth - paddingX * 2);
+                            const y = chartHeight - paddingY - (item.count / maxCount) * (chartHeight - paddingY * 2);
+                            return { x, y, ...item };
+                        });
+
+                        // 生成路径字符串
+                        const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+
+                        return (
+                            <div className="relative">
+                                <svg
+                                    width="100%"
+                                    height="280"
+                                    viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                                    preserveAspectRatio="xMidYMid meet"
+                                    className="overflow-visible"
+                                >
+                                    {/* Grid lines */}
+                                    {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+                                        const y = chartHeight - paddingY - ratio * (chartHeight - paddingY * 2);
+                                        return (
+                                            <g key={`grid-${i}`}>
+                                                <line
+                                                    x1={paddingX}
+                                                    y1={y}
+                                                    x2={chartWidth - paddingX}
+                                                    y2={y}
+                                                    stroke="#e5e7eb"
+                                                    strokeWidth="1"
+                                                />
+                                                <text
+                                                    x={paddingX - 10}
+                                                    y={y + 4}
+                                                    textAnchor="end"
+                                                    className="text-xs fill-gray-500"
+                                                >
+                                                    {Math.round(ratio * maxCount).toLocaleString()}
+                                                </text>
+                                            </g>
+                                        );
+                                    })}
+
+                                    {/* Axes */}
+                                    <line
+                                        x1={paddingX}
+                                        y1={paddingY}
+                                        x2={paddingX}
+                                        y2={chartHeight - paddingY}
+                                        stroke="#d1d5db"
+                                        strokeWidth="2"
+                                    />
+                                    <line
+                                        x1={paddingX}
+                                        y1={chartHeight - paddingY}
+                                        x2={chartWidth - paddingX}
+                                        y2={chartHeight - paddingY}
+                                        stroke="#d1d5db"
+                                        strokeWidth="2"
+                                    />
+
+                                    {/* Line path with gradient */}
+                                    <defs>
+                                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
+                                            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+                                        </linearGradient>
+                                    </defs>
+
+                                    {/* Fill under line */}
+                                    <path
+                                        d={`${pathD} L ${points[points.length - 1].x} ${chartHeight - paddingY} L ${paddingX} ${chartHeight - paddingY} Z`}
+                                        fill="url(#lineGradient)"
+                                    />
+
+                                    {/* Line */}
+                                    <path
+                                        d={pathD}
+                                        fill="none"
+                                        stroke="#3b82f6"
+                                        strokeWidth="2.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+
+                                    {/* Points */}
+                                    {points.map((point, i) => (
+                                        <g key={`point-${i}`} className="group">
+                                            <circle
+                                                cx={point.x}
+                                                cy={point.y}
+                                                r="4"
+                                                fill="white"
+                                                stroke="#3b82f6"
+                                                strokeWidth="2"
+                                                className="cursor-pointer hover:r-5 transition-all"
+                                            />
+                                            <text
+                                                x={point.x}
+                                                y={chartHeight - 5}
+                                                textAnchor="middle"
+                                                className="text-xs fill-gray-500"
+                                            >
+                                                {point.date}
+                                            </text>
+                                            {/* Tooltip */}
+                                            <g className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                                <rect
+                                                    x={point.x - 35}
+                                                    y={point.y - 25}
+                                                    width="70"
+                                                    height="20"
+                                                    fill="#1f2937"
+                                                    rx="4"
+                                                />
+                                                <text
+                                                    x={point.x}
+                                                    y={point.y - 10}
+                                                    textAnchor="middle"
+                                                    className="text-xs fill-white font-semibold"
+                                                >
+                                                    {point.count.toLocaleString()}
+                                                </text>
+                                            </g>
+                                        </g>
+                                    ))}
+                                </svg>
+                            </div>
+                        );
+                    })()}
+
                     <div className="mt-4 text-xs text-gray-400 text-center">数据更新时间：{new Date().toLocaleString('zh-CN')}</div>
                 </div>
 
@@ -1619,125 +1784,266 @@ const StatisticsPanel = () => {
                 </div>
 
                 {/* 新增图表：奖励来源分布（初级/中级/高级） */}
-                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <h3 className="text-lg font-bold text-gray-800 mb-6">奖励来源分布（初级/中级/高级）</h3>
-                    <div className="grid grid-cols-3 gap-4 h-56 items-end">
-                        {distributionBySource.map(item => (
-                            <div key={item.source} className="flex flex-col items-center gap-2">
-                                <div
-                                    className="w-full min-w-16 bg-gradient-to-t from-emerald-500 to-emerald-400 rounded-t-md flex items-end justify-center text-xs text-white font-semibold shadow-sm"
-                                    style={{ height: `${(item.amount / maxSourceDistribution) * 100}%` }}
-                                >
-                                    <span className="pb-2">{item.amount}</span>
-                                </div>
-                                <span className="text-sm text-gray-600">{wheelLabel[item.source as WheelType]}</span>
-                            </div>
-                        ))}
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[300px]">
+                    <h3 className="text-lg font-bold text-gray-800 mb-6">奖励来源分布</h3>
+                    <div className="flex items-center justify-center h-48 gap-12">
+                        {/* Pie Chart */}
+                        {(() => {
+                            const total = distributionBySource.reduce((sum, item) => sum + item.amount, 0);
+                            const colors = ['#10b981', '#8b5cf6', '#ec4899']; // emerald, purple, pink
+                            let offset = 0;
+                            const circumference = 251.2; // 2 * π * 40
+
+                            return (
+                                <svg className="w-32 h-32" viewBox="0 0 100 100">
+                                    {distributionBySource.map((item, idx) => {
+                                        const percentage = total > 0 ? (item.amount / total) * 100 : 0;
+                                        const dasharray = (percentage / 100) * circumference;
+                                        const currentOffset = offset;
+                                        offset += dasharray;
+
+                                        return (
+                                            <circle
+                                                key={item.source}
+                                                cx="50"
+                                                cy="50"
+                                                r="40"
+                                                fill="none"
+                                                stroke={colors[idx]}
+                                                strokeWidth="20"
+                                                strokeDasharray={`${dasharray} ${circumference}`}
+                                                strokeDashoffset={`-${currentOffset}`}
+                                                transform="rotate(-90 50 50)"
+                                            />
+                                        );
+                                    })}
+                                    {/* Center circle for donut */}
+                                    <circle cx="50" cy="50" r="20" fill="white" />
+                                    <text x="50" y="55" textAnchor="middle" className="text-xs font-bold fill-gray-700">
+                                        100%
+                                    </text>
+                                </svg>
+                            );
+                        })()}
+
+                        {/* Legend */}
+                        <div className="space-y-3">
+                            {(() => {
+                                const total = distributionBySource.reduce((sum, item) => sum + item.amount, 0);
+                                const colors = ['bg-emerald-500', 'bg-purple-500', 'bg-pink-500'];
+                                return distributionBySource.map((item, idx) => {
+                                    const percentage = total > 0 ? ((item.amount / total) * 100).toFixed(1) : '0';
+                                    return (
+                                        <div key={item.source} className="flex items-center gap-3">
+                                            <div className={`w-3 h-3 ${colors[idx]} rounded-full flex-shrink-0`}></div>
+                                            <span className="text-sm text-gray-600">{wheelLabel[item.source]} <span className="font-semibold">{percentage}%</span></span>
+                                        </div>
+                                    );
+                                });
+                            })()}
+                        </div>
                     </div>
-                    <div className="mt-3 text-xs text-gray-500">基于当前筛选统计 · 总数量 {totalRewardQuantity}</div>
                 </div>
             </div>
 
-            {showRewardModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6">
-                        <div className="flex items-start justify-between mb-4">
-                            <div>
-                                <div className="text-lg font-bold text-gray-900">奖励发放详情</div>
-                                <div className="text-sm text-gray-500 mt-1">
-                                    {selectedWheelId === 'all' ? '显示全部产出' : `筛选活动：${MOCK_ACTIVITIES.find(a => a.id === selectedWheelId)?.remarks || selectedWheelId}`}
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => setShowRewardModal(false)}
-                                className="text-gray-400 hover:text-gray-600 text-xl font-bold"
-                            >
-                                ✕
-                            </button>
-                        </div>
+            {showRewardModal && (() => {
+                // 按活动聚合数据
+                const byActivity = MOCK_ACTIVITIES.map(activity => {
+                    const activityRewards = MOCK_REWARD_OUTPUTS.filter(r => r.activityId === activity.id);
+                    const totalQty = activityRewards.reduce((sum, r) => sum + r.quantity, 0);
 
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {[
-                                { key: 'all', label: '全部' },
-                                { key: 'currency', label: '货币' },
-                                { key: 'skin', label: '装扮' },
-                                { key: 'clothing', label: '服饰' },
-                                { key: 'consumable', label: '消耗品' }
-                            ].map(option => (
+                    // 按类型统计
+                    const byType: Record<RewardType, number> = {
+                        currency: 0,
+                        skin: 0,
+                        clothing: 0,
+                        consumable: 0
+                    };
+                    activityRewards.forEach(r => {
+                        byType[r.rewardType] += r.quantity;
+                    });
+
+                    return {
+                        id: activity.id,
+                        name: activity.remarks || activity.id,
+                        total: totalQty,
+                        byType
+                    };
+                });
+
+                // 按奖励聚合数据
+                const byReward = MOCK_REWARD_OUTPUTS.reduce((acc, item) => {
+                    const existing = acc.find(r => r.name === item.rewardName);
+                    if (existing) {
+                        existing.total += item.quantity;
+                        existing.times += 1;
+                    } else {
+                        acc.push({
+                            name: item.rewardName,
+                            type: item.rewardType,
+                            total: item.quantity,
+                            times: 1
+                        });
+                    }
+                    return acc;
+                }, [] as Array<{ name: string; type: RewardType; total: number; times: number }>);
+
+                const rewardTypeLabel: Record<RewardType, string> = {
+                    currency: '货币',
+                    skin: '装扮',
+                    clothing: '服饰',
+                    consumable: '消耗品'
+                };
+
+                const typeColors: Record<RewardType, string> = {
+                    currency: 'bg-yellow-100 text-yellow-700',
+                    skin: 'bg-purple-100 text-purple-700',
+                    clothing: 'bg-pink-100 text-pink-700',
+                    consumable: 'bg-blue-100 text-blue-700'
+                };
+
+                return (
+                    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl max-h-[90vh] flex flex-col">
+                            {/* 头部 */}
+                            <div className="flex items-center justify-between p-6 border-b">
+                                <h2 className="text-xl font-bold text-gray-900">奖励发放统计</h2>
                                 <button
-                                    key={option.key}
-                                    onClick={() => setRewardFilter(option.key as 'all' | RewardType)}
-                                    className={`px-3 py-1.5 text-sm rounded-full border transition ${rewardFilter === option.key ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-200 text-gray-600 hover:border-blue-200 hover:text-blue-700'}`}
+                                    onClick={() => setShowRewardModal(false)}
+                                    className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
                                 >
-                                    {option.label}
+                                    ✕
                                 </button>
-                            ))}
-                            <div className="ml-auto text-xs text-gray-500">共 {filteredOutputs.length} 条记录 · 数量 {totalRewardQuantity}</div>
-                        </div>
+                            </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                            <div className="col-span-1 md:col-span-2 bg-gray-50 border border-gray-100 rounded-xl p-4">
-                                <div className="text-sm font-semibold text-gray-700 mb-3">数量分布</div>
-                                <div className="flex items-end gap-4 h-40">
-                                    {distributionByType.map(item => (
-                                        <div key={item.type} className="flex-1 flex flex-col items-center gap-2">
-                                            <div
-                                                className="w-full bg-blue-50 rounded-t-md flex items-end justify-center text-xs text-blue-800 font-semibold"
-                                                style={{ height: `${(item.amount / maxDistribution) * 100}%` }}
-                                            >
-                                                <span className="pb-2">{item.amount}</span>
-                                            </div>
-                                            <span className="text-xs text-gray-500">{rewardTypeLabel[item.type]}</span>
+                            {/* 标签页切换 */}
+                            <div className="flex border-b px-6">
+                                <button
+                                    onClick={() => setViewMode('activity')}
+                                    className={`px-4 py-3 text-sm font-medium border-b-2 transition ${viewMode === 'activity'
+                                        ? 'border-blue-600 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                                        }`}
+                                >
+                                    按活动查看
+                                </button>
+                                <button
+                                    onClick={() => setViewMode('reward')}
+                                    className={`px-4 py-3 text-sm font-medium border-b-2 transition ${viewMode === 'reward'
+                                        ? 'border-blue-600 text-blue-600'
+                                        : 'border-transparent text-gray-500 hover:text-gray-700'
+                                        }`}
+                                >
+                                    按道具查看
+                                </button>
+                            </div>
+
+                            {/* 内容区域 */}
+                            <div className="flex-1 overflow-y-auto p-6">
+                                {viewMode === 'activity' ? (
+                                    <div className="space-y-4">
+                                        <div className="text-sm text-gray-500 mb-4">
+                                            显示各活动的奖励发放情况及类型分布 · 点击类型标签查看详情
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="bg-gray-50 border border-gray-100 rounded-xl p-4 flex flex-col gap-3">
-                                <div className="text-sm font-semibold text-gray-700">关键指标</div>
-                                <div className="text-sm text-gray-600 flex items-center justify-between">
-                                    <span>总发放数量</span>
-                                    <span className="font-bold text-blue-700">{totalRewardQuantity}</span>
-                                </div>
-                                <div className="text-sm text-gray-600 flex items-center justify-between">
-                                    <span>记录条数</span>
-                                    <span className="font-bold text-gray-800">{filteredOutputs.length}</span>
-                                </div>
-                                <div className="text-xs text-gray-500">图表基于当前筛选结果</div>
-                            </div>
-                        </div>
+                                        {byActivity.map(activity => {
+                                            const activityRewards = MOCK_REWARD_OUTPUTS.filter(r => r.activityId === activity.id);
 
-                        <div className="max-h-80 overflow-y-auto border border-gray-100 rounded-xl">
-                            <table className="w-full text-sm">
-                                <thead className="bg-gray-50 text-gray-600">
-                                    <tr>
-                                        <th className="text-left px-4 py-3 font-semibold">奖励</th>
-                                        <th className="text-left px-4 py-3 font-semibold">类型</th>
-                                        <th className="text-left px-4 py-3 font-semibold">数量</th>
-                                        <th className="text-left px-4 py-3 font-semibold">日期</th>
-                                        <th className="text-left px-4 py-3 font-semibold">所属活动</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-100">
-                                    {filteredOutputs.length === 0 && (
-                                        <tr>
-                                            <td colSpan={5} className="px-4 py-6 text-center text-gray-400">当前筛选暂无产出</td>
-                                        </tr>
-                                    )}
-                                    {filteredOutputs.map(item => (
-                                        <tr key={item.id} className="hover:bg-gray-50">
-                                            <td className="px-4 py-3 font-medium text-gray-800">{item.rewardName}</td>
-                                            <td className="px-4 py-3 text-gray-600">{rewardTypeLabel[item.rewardType]}</td>
-                                            <td className="px-4 py-3 text-blue-700 font-semibold">{item.quantity}</td>
-                                            <td className="px-4 py-3 text-gray-500">{item.date}</td>
-                                            <td className="px-4 py-3 text-gray-500">{MOCK_ACTIVITIES.find(a => a.id === item.activityId)?.remarks || item.activityId}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                            return (
+                                                <div key={activity.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition">
+                                                    <div className="flex items-start justify-between mb-3">
+                                                        <div>
+                                                            <h3 className="font-semibold text-gray-900">{activity.name}</h3>
+                                                            <p className="text-sm text-gray-500 mt-1">总发放: <span className="font-bold text-blue-600">{activity.total}</span> 个</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex gap-2 flex-wrap">
+                                                        {(Object.keys(activity.byType) as RewardType[]).map(type => (
+                                                            activity.byType[type] > 0 && (
+                                                                <button
+                                                                    key={type}
+                                                                    onClick={() => {
+                                                                        if (expandedDetail?.activityId === activity.id && expandedDetail?.type === type) {
+                                                                            setExpandedDetail(null);
+                                                                        } else {
+                                                                            setExpandedDetail({ activityId: activity.id, type });
+                                                                        }
+                                                                    }}
+                                                                    className={`px-3 py-1.5 rounded-full text-xs font-medium ${typeColors[type]} hover:opacity-80 transition cursor-pointer ${expandedDetail?.activityId === activity.id && expandedDetail?.type === type ? 'ring-2 ring-offset-1 ring-blue-500' : ''
+                                                                        }`}
+                                                                >
+                                                                    {rewardTypeLabel[type]}: {activity.byType[type]}
+                                                                    {expandedDetail?.activityId === activity.id && expandedDetail?.type === type ? ' ▼' : ' ▶'}
+                                                                </button>
+                                                            )
+                                                        ))}
+                                                    </div>
+
+                                                    {/* 展开的详情 */}
+                                                    {expandedDetail?.activityId === activity.id && (
+                                                        <div className="mt-4 pt-4 border-t border-gray-200">
+                                                            <div className="text-xs font-medium text-gray-600 mb-2">
+                                                                {rewardTypeLabel[expandedDetail.type]} 详细列表
+                                                            </div>
+                                                            <div className="bg-gray-50 rounded-lg p-3 space-y-2">
+                                                                {activityRewards
+                                                                    .filter(r => r.rewardType === expandedDetail.type)
+                                                                    .map((reward, idx) => (
+                                                                        <div key={idx} className="flex items-center justify-between text-sm">
+                                                                            <span className="text-gray-700">{reward.rewardName}</span>
+                                                                            <div className="flex items-center gap-3">
+                                                                                <span className="text-xs text-gray-500">
+                                                                                    {reward.wheel === 'beginner' ? '初级' : reward.wheel === 'intermediate' ? '中级' : '高级'}轮盘
+                                                                                </span>
+                                                                                <span className="font-semibold text-blue-600">{reward.quantity}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="text-sm text-gray-500 mb-4">
+                                            显示各道具的累计发放数量和次数
+                                        </div>
+                                        <div className="border border-gray-200 rounded-lg overflow-hidden">
+                                            <table className="w-full text-sm">
+                                                <thead className="bg-gray-50">
+                                                    <tr>
+                                                        <th className="px-4 py-3 text-left font-medium text-gray-600">道具名称</th>
+                                                        <th className="px-4 py-3 text-left font-medium text-gray-600">类型</th>
+                                                        <th className="px-4 py-3 text-right font-medium text-gray-600">发放次数</th>
+                                                        <th className="px-4 py-3 text-right font-medium text-gray-600">总数量</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-200">
+                                                    {byReward.map((reward, idx) => (
+                                                        <tr key={idx} className="hover:bg-blue-50">
+                                                            <td className="px-4 py-3 font-medium text-gray-900">{reward.name}</td>
+                                                            <td className="px-4 py-3">
+                                                                <span className={`inline-block px-2 py-1 rounded text-xs ${typeColors[reward.type]}`}>
+                                                                    {rewardTypeLabel[reward.type]}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-4 py-3 text-right text-gray-600">{reward.times}</td>
+                                                            <td className="px-4 py-3 text-right font-semibold text-blue-600">{reward.total}</td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
         </div>
     )
 }
@@ -1776,12 +2082,16 @@ export default function App() {
     // Render content based on state
     const renderContent = () => {
         if (isCreating || editingActivity) {
+            // Check if activity has ended
+            const isReadOnly = editingActivity ? new Date() > new Date(editingActivity.endTime) : false;
+
             return (
                 <ActivityEditor
                     initialData={editingActivity}
                     onSave={handleSaveActivity}
                     onCancel={() => { setIsCreating(false); setEditingActivity(null); }}
                     showToast={showToast}
+                    isReadOnly={isReadOnly}
                 />
             );
         }
