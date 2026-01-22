@@ -89,6 +89,7 @@ interface DrawRecord {
 }
 
 type RewardType = 'currency' | 'skin' | 'clothing' | 'consumable';
+type RewardQuality = 'common' | 'fine' | 'rare' | 'excellent' | 'epic' | 'legendary';
 
 interface RewardOutput {
     id: string;
@@ -96,6 +97,7 @@ interface RewardOutput {
     wheel: WheelType;
     rewardName: string;
     rewardType: RewardType;
+    quality: RewardQuality;
     quantity: number;
     date: string;
 }
@@ -197,22 +199,22 @@ const MOCK_DRAW_RECORDS: DrawRecord[] = Array.from({ length: 20 }).map((_, i) =>
 });
 
 const MOCK_REWARD_OUTPUTS: RewardOutput[] = [
-    { id: 'rp_001', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '星豆', rewardType: 'currency', quantity: 3200, date: '2026-01-01' },
-    { id: 'rp_002', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '普通皮肤', rewardType: 'skin', quantity: 120, date: '2026-01-01' },
-    { id: 'rp_003', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '活动道具', rewardType: 'consumable', quantity: 540, date: '2026-01-02' },
-    { id: 'rp_004', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '稀有装扮', rewardType: 'skin', quantity: 35, date: '2026-01-02' },
-    { id: 'rp_005', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quantity: 6800, date: '2026-01-03' },
-    { id: 'rp_006', activityId: 'ACT_20240101', wheel: 'beginner', rewardName: '星豆', rewardType: 'currency', quantity: 4200, date: '2026-01-03' },
-    { id: 'rp_007', activityId: 'ACT_20240101', wheel: 'intermediate', rewardName: '兑换券', rewardType: 'consumable', quantity: 260, date: '2026-01-04' },
-    { id: 'rp_008', activityId: 'ACT_20240101', wheel: 'intermediate', rewardName: '星豆', rewardType: 'currency', quantity: 5200, date: '2026-01-04' },
-    { id: 'rp_009', activityId: 'ACT_20231001', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quantity: 7500, date: '2026-01-05' },
-    { id: 'rp_010', activityId: 'ACT_20231001', wheel: 'advanced', rewardName: '稀有装扮', rewardType: 'skin', quantity: 28, date: '2026-01-05' },
-    { id: 'rp_011', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '活动道具', rewardType: 'consumable', quantity: 310, date: '2026-01-06' },
-    { id: 'rp_012', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quantity: 6100, date: '2026-01-06' },
-    { id: 'rp_013', activityId: 'ACT_20240101', wheel: 'beginner', rewardName: '普通服饰', rewardType: 'clothing', quantity: 88, date: '2026-01-06' },
-    { id: 'rp_014', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '星豆', rewardType: 'currency', quantity: 4350, date: '2026-01-06' },
-    { id: 'rp_015', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '纪念服饰', rewardType: 'clothing', quantity: 42, date: '2026-01-06' },
-    { id: 'rp_016', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '能量饮料', rewardType: 'consumable', quantity: 180, date: '2026-01-07' },
+    { id: 'rp_001', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 3200, date: '2026-01-01' },
+    { id: 'rp_002', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '普通皮肤', rewardType: 'skin', quality: 'fine', quantity: 120, date: '2026-01-01' },
+    { id: 'rp_003', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '活动道具', rewardType: 'consumable', quality: 'rare', quantity: 540, date: '2026-01-02' },
+    { id: 'rp_004', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '稀有装扮', rewardType: 'skin', quality: 'epic', quantity: 35, date: '2026-01-02' },
+    { id: 'rp_005', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 6800, date: '2026-01-03' },
+    { id: 'rp_006', activityId: 'ACT_20240101', wheel: 'beginner', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 4200, date: '2026-01-03' },
+    { id: 'rp_007', activityId: 'ACT_20240101', wheel: 'intermediate', rewardName: '兑换券', rewardType: 'consumable', quality: 'excellent', quantity: 260, date: '2026-01-04' },
+    { id: 'rp_008', activityId: 'ACT_20240101', wheel: 'intermediate', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 5200, date: '2026-01-04' },
+    { id: 'rp_009', activityId: 'ACT_20231001', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 7500, date: '2026-01-05' },
+    { id: 'rp_010', activityId: 'ACT_20231001', wheel: 'advanced', rewardName: '稀有装扮', rewardType: 'skin', quality: 'rare', quantity: 28, date: '2026-01-05' },
+    { id: 'rp_011', activityId: 'ACT_20231001', wheel: 'beginner', rewardName: '活动道具', rewardType: 'consumable', quality: 'fine', quantity: 310, date: '2026-01-06' },
+    { id: 'rp_012', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 6100, date: '2026-01-06' },
+    { id: 'rp_013', activityId: 'ACT_20240101', wheel: 'beginner', rewardName: '普通服饰', rewardType: 'clothing', quality: 'common', quantity: 88, date: '2026-01-06' },
+    { id: 'rp_014', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '星豆', rewardType: 'currency', quality: 'common', quantity: 4350, date: '2026-01-06' },
+    { id: 'rp_015', activityId: 'ACT_20231001', wheel: 'intermediate', rewardName: '纪念服饰', rewardType: 'clothing', quality: 'excellent', quantity: 42, date: '2026-01-06' },
+    { id: 'rp_016', activityId: 'ACT_20240101', wheel: 'advanced', rewardName: '能量饮料', rewardType: 'consumable', quality: 'legendary', quantity: 180, date: '2026-01-07' },
 ];
 
 // Components
@@ -1431,11 +1433,27 @@ const StatisticsPanel = () => {
     const [trendTimeRange, setTrendTimeRange] = useState<'7d' | '30d' | '90d'>('7d');
     const [viewMode, setViewMode] = useState<'activity' | 'reward'>('activity');
     const [expandedDetail, setExpandedDetail] = useState<{ activityId: string; type: RewardType } | null>(null);
+    const [selectedTypes, setSelectedTypes] = useState<RewardType[]>(['currency', 'skin', 'clothing', 'consumable']);
+    const [selectedQualities, setSelectedQualities] = useState<RewardQuality[]>(['common', 'fine', 'rare', 'excellent', 'epic', 'legendary']);
 
     const filteredOutputs = MOCK_REWARD_OUTPUTS.filter(item => {
         const matchActivity = selectedWheelId === 'all' || item.activityId === selectedWheelId;
-        return matchActivity;
+        const matchType = selectedTypes.includes(item.rewardType);
+        const matchQuality = selectedQualities.includes(item.quality);
+        return matchActivity && matchType && matchQuality;
     });
+
+    const toggleType = (type: RewardType) => {
+        setSelectedTypes(prev =>
+            prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+        );
+    };
+
+    const toggleQuality = (quality: RewardQuality) => {
+        setSelectedQualities(prev =>
+            prev.includes(quality) ? prev.filter(q => q !== quality) : [...prev, quality]
+        );
+    };
 
     // 新增：按来源（初级/中级/高级）分布
     const distributionBySource = (['beginner', 'intermediate', 'advanced'] as WheelType[]).map(w => {
@@ -1453,7 +1471,7 @@ const StatisticsPanel = () => {
     return (
         <div className="space-y-6">
             {/* Filter Section */}
-            <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+            <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm space-y-4">
                 <div className="flex items-center gap-4">
                     <label className="text-sm font-medium text-gray-700">筛选轮盘:</label>
                     <select
@@ -1470,6 +1488,58 @@ const StatisticsPanel = () => {
                     </select>
                     <div className="text-xs text-gray-500 ml-auto">
                         当前选择: {selectedWheelId === 'all' ? '全部轮盘' : MOCK_ACTIVITIES.find(a => a.id === selectedWheelId)?.remarks || selectedWheelId}
+                    </div>
+                </div>
+
+                {/* 奖励类型筛选 */}
+                <div className="flex items-center gap-4">
+                    <label className="text-sm font-medium text-gray-700">奖励类型:</label>
+                    <div className="flex gap-3">
+                        {[
+                            { value: 'currency', label: '货币', color: 'blue' },
+                            { value: 'skin', label: '装扮', color: 'purple' },
+                            { value: 'clothing', label: '服饰', color: 'pink' },
+                            { value: 'consumable', label: '消耗品', color: 'yellow' }
+                        ].map(type => (
+                            <label key={type.value} className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedTypes.includes(type.value as RewardType)}
+                                    onChange={() => toggleType(type.value as RewardType)}
+                                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className={`text-sm px-2 py-1 rounded bg-${type.color}-100 text-${type.color}-700`}>
+                                    {type.label}
+                                </span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 品质筛选 */}
+                <div className="flex items-center gap-4">
+                    <label className="text-sm font-medium text-gray-700">奖励品质:</label>
+                    <div className="flex gap-3 flex-wrap">
+                        {[
+                            { value: 'common', label: '普通', color: 'gray' },
+                            { value: 'fine', label: '精良', color: 'green' },
+                            { value: 'rare', label: '稀有', color: 'blue' },
+                            { value: 'excellent', label: '优秀', color: 'indigo' },
+                            { value: 'epic', label: '史诗', color: 'purple' },
+                            { value: 'legendary', label: '传奇', color: 'orange' }
+                        ].map(quality => (
+                            <label key={quality.value} className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedQualities.includes(quality.value as RewardQuality)}
+                                    onChange={() => toggleQuality(quality.value as RewardQuality)}
+                                    className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                />
+                                <span className={`text-sm px-2 py-1 rounded bg-${quality.color}-100 text-${quality.color}-700 font-medium`}>
+                                    {quality.label}
+                                </span>
+                            </label>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -1503,284 +1573,92 @@ const StatisticsPanel = () => {
                 </div>
             </div>
 
+            {/* 奖励分布图表 - 类型和来源 */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Simulated Chart 1 - Line Chart */}
-                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold text-gray-800">参与趋势 {selectedWheelId !== 'all' && `- ${selectedWheelId}`}</h3>
-                        <div className="flex gap-2">
-                            {[
-                                { value: '7d', label: '7天' },
-                                { value: '30d', label: '30天' },
-                                { value: '90d', label: '90天' }
-                            ].map(option => (
-                                <button
-                                    key={option.value}
-                                    onClick={() => setTrendTimeRange(option.value as '7d' | '30d' | '90d')}
-                                    className={`px-3 py-1 text-xs rounded-full transition ${trendTimeRange === option.value
-                                        ? 'bg-blue-600 text-white'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                        }`}
-                                >
-                                    {option.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
+                {/* Simulated Chart 2 - 动态奖励类型分布 */}
+                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[300px]">
+                    <h3 className="text-lg font-bold text-gray-800 mb-6">奖励类型分布</h3>
                     {(() => {
-                        // 不同时间范围的数据
-                        const trendData = {
-                            '7d': [
-                                { date: '01-01', count: 8420 },
-                                { date: '01-02', count: 9830 },
-                                { date: '01-03', count: 7560 },
-                                { date: '01-04', count: 12340 },
-                                { date: '01-05', count: 10580 },
-                                { date: '01-06', count: 15230 },
-                                { date: '01-07', count: 11940 }
-                            ],
-                            '30d': [
-                                { date: '12-09', count: 5420 },
-                                { date: '12-12', count: 6830 },
-                                { date: '12-15', count: 7560 },
-                                { date: '12-18', count: 9340 },
-                                { date: '12-21', count: 11580 },
-                                { date: '12-24', count: 13230 },
-                                { date: '12-27', count: 14940 },
-                                { date: '12-30', count: 12340 }
-                            ],
-                            '90d': [
-                                { date: '10-11', count: 4200 },
-                                { date: '10-31', count: 6500 },
-                                { date: '11-20', count: 8900 },
-                                { date: '12-10', count: 11200 },
-                                { date: '12-30', count: 13800 }
-                            ]
-                        };
-
-                        const data = trendData[trendTimeRange];
-                        const maxCount = Math.max(...data.map(d => d.count));
-                        const chartHeight = 240;
-                        const chartWidth = 600;
-                        const paddingX = 30;
-                        const paddingY = 20;
-
-                        // 计算SVG坐标
-                        const points = data.map((item, i) => {
-                            const x = paddingX + (i / (data.length - 1)) * (chartWidth - paddingX * 2);
-                            const y = chartHeight - paddingY - (item.count / maxCount) * (chartHeight - paddingY * 2);
-                            return { x, y, ...item };
+                        const typeDistribution = (['currency', 'skin', 'clothing', 'consumable'] as RewardType[]).map(type => {
+                            const amount = filteredOutputs
+                                .filter(item => item.rewardType === type)
+                                .reduce((sum, item) => sum + item.quantity, 0);
+                            return { type, amount };
                         });
-
-                        // 生成路径字符串
-                        const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+                        const total = typeDistribution.reduce((sum, item) => sum + item.amount, 0);
+                        const colors: Record<RewardType, string> = {
+                            currency: '#3b82f6',
+                            skin: '#a855f7',
+                            clothing: '#ec4899',
+                            consumable: '#facc15'
+                        };
+                        const colorClasses: Record<RewardType, string> = {
+                            currency: 'bg-blue-500',
+                            skin: 'bg-purple-500',
+                            clothing: 'bg-pink-500',
+                            consumable: 'bg-yellow-400'
+                        };
+                        const typeLabels: Record<RewardType, string> = {
+                            currency: '货币',
+                            skin: '装扮',
+                            clothing: '服饰',
+                            consumable: '消耗品'
+                        };
+                        let offset = 0;
+                        const circumference = 251.2;
 
                         return (
-                            <div className="relative">
-                                <svg
-                                    width="100%"
-                                    height="280"
-                                    viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                                    preserveAspectRatio="xMidYMid meet"
-                                    className="overflow-visible"
-                                >
-                                    {/* Grid lines */}
-                                    {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
-                                        const y = chartHeight - paddingY - ratio * (chartHeight - paddingY * 2);
-                                        return (
-                                            <g key={`grid-${i}`}>
-                                                <line
-                                                    x1={paddingX}
-                                                    y1={y}
-                                                    x2={chartWidth - paddingX}
-                                                    y2={y}
-                                                    stroke="#e5e7eb"
-                                                    strokeWidth="1"
-                                                />
-                                                <text
-                                                    x={paddingX - 10}
-                                                    y={y + 4}
-                                                    textAnchor="end"
-                                                    className="text-xs fill-gray-500"
-                                                >
-                                                    {Math.round(ratio * maxCount).toLocaleString()}
-                                                </text>
-                                            </g>
-                                        );
-                                    })}
+                            <div className="flex items-center justify-center h-48 gap-12">
+                                {total > 0 ? (
+                                    <>
+                                        <svg className="w-32 h-32" viewBox="0 0 100 100">
+                                            {typeDistribution.map((item) => {
+                                                if (item.amount === 0) return null;
+                                                const percentage = (item.amount / total) * 100;
+                                                const dasharray = (percentage / 100) * circumference;
+                                                const currentOffset = offset;
+                                                offset += dasharray;
 
-                                    {/* Axes */}
-                                    <line
-                                        x1={paddingX}
-                                        y1={paddingY}
-                                        x2={paddingX}
-                                        y2={chartHeight - paddingY}
-                                        stroke="#d1d5db"
-                                        strokeWidth="2"
-                                    />
-                                    <line
-                                        x1={paddingX}
-                                        y1={chartHeight - paddingY}
-                                        x2={chartWidth - paddingX}
-                                        y2={chartHeight - paddingY}
-                                        stroke="#d1d5db"
-                                        strokeWidth="2"
-                                    />
-
-                                    {/* Line path with gradient */}
-                                    <defs>
-                                        <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                            <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
-                                            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
-                                        </linearGradient>
-                                    </defs>
-
-                                    {/* Fill under line */}
-                                    <path
-                                        d={`${pathD} L ${points[points.length - 1].x} ${chartHeight - paddingY} L ${paddingX} ${chartHeight - paddingY} Z`}
-                                        fill="url(#lineGradient)"
-                                    />
-
-                                    {/* Line */}
-                                    <path
-                                        d={pathD}
-                                        fill="none"
-                                        stroke="#3b82f6"
-                                        strokeWidth="2.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    />
-
-                                    {/* Points */}
-                                    {points.map((point, i) => (
-                                        <g key={`point-${i}`} className="group">
-                                            <circle
-                                                cx={point.x}
-                                                cy={point.y}
-                                                r="4"
-                                                fill="white"
-                                                stroke="#3b82f6"
-                                                strokeWidth="2"
-                                                className="cursor-pointer hover:r-5 transition-all"
-                                            />
-                                            <text
-                                                x={point.x}
-                                                y={chartHeight - 5}
-                                                textAnchor="middle"
-                                                className="text-xs fill-gray-500"
-                                            >
-                                                {point.date}
+                                                return (
+                                                    <circle
+                                                        key={item.type}
+                                                        cx="50"
+                                                        cy="50"
+                                                        r="40"
+                                                        fill="none"
+                                                        stroke={colors[item.type]}
+                                                        strokeWidth="20"
+                                                        strokeDasharray={`${dasharray} ${circumference}`}
+                                                        strokeDashoffset={`-${currentOffset}`}
+                                                        transform="rotate(-90 50 50)"
+                                                    />
+                                                );
+                                            })}
+                                            <circle cx="50" cy="50" r="20" fill="white" />
+                                            <text x="50" y="55" textAnchor="middle" className="text-xs font-bold fill-gray-700">
+                                                100%
                                             </text>
-                                            {/* Tooltip */}
-                                            <g className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                                                <rect
-                                                    x={point.x - 35}
-                                                    y={point.y - 25}
-                                                    width="70"
-                                                    height="20"
-                                                    fill="#1f2937"
-                                                    rx="4"
-                                                />
-                                                <text
-                                                    x={point.x}
-                                                    y={point.y - 10}
-                                                    textAnchor="middle"
-                                                    className="text-xs fill-white font-semibold"
-                                                >
-                                                    {point.count.toLocaleString()}
-                                                </text>
-                                            </g>
-                                        </g>
-                                    ))}
-                                </svg>
+                                        </svg>
+
+                                        <div className="space-y-3">
+                                            {typeDistribution.map((item) => {
+                                                if (item.amount === 0) return null;
+                                                const percentage = ((item.amount / total) * 100).toFixed(1);
+                                                return (
+                                                    <div key={item.type} className="flex items-center gap-3">
+                                                        <div className={`w-3 h-3 ${colorClasses[item.type]} rounded-full flex-shrink-0`}></div>
+                                                        <span className="text-sm text-gray-600">{typeLabels[item.type]} <span className="font-semibold">{percentage}%</span></span>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-gray-400 text-sm">暂无数据</div>
+                                )}
                             </div>
                         );
                     })()}
-
-                    <div className="mt-4 text-xs text-gray-400 text-center">数据更新时间：{new Date().toLocaleString('zh-CN')}</div>
-                </div>
-
-                {/* Simulated Chart 2 */}
-                <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[300px]">
-                    <h3 className="text-lg font-bold text-gray-800 mb-6">奖励类型分布</h3>
-                    <div className="flex items-center justify-center h-48 gap-12">
-                        {/* Pie Chart */}
-                        <svg className="w-32 h-32" viewBox="0 0 100 100">
-                            {/* Currency 40% */}
-                            <circle
-                                cx="50"
-                                cy="50"
-                                r="40"
-                                fill="none"
-                                stroke="#3b82f6"
-                                strokeWidth="20"
-                                strokeDasharray="100.5 251.2"
-                                transform="rotate(-90 50 50)"
-                            />
-                            {/* Skin 25% */}
-                            <circle
-                                cx="50"
-                                cy="50"
-                                r="40"
-                                fill="none"
-                                stroke="#a855f7"
-                                strokeWidth="20"
-                                strokeDasharray="62.8 251.2"
-                                strokeDashoffset="-100.5"
-                                transform="rotate(-90 50 50)"
-                            />
-                            {/* Clothing 20% */}
-                            <circle
-                                cx="50"
-                                cy="50"
-                                r="40"
-                                fill="none"
-                                stroke="#06b6d4"
-                                strokeWidth="20"
-                                strokeDasharray="50.2 251.2"
-                                strokeDashoffset="-163.3"
-                                transform="rotate(-90 50 50)"
-                            />
-                            {/* Consumable 15% */}
-                            <circle
-                                cx="50"
-                                cy="50"
-                                r="40"
-                                fill="none"
-                                stroke="#facc15"
-                                strokeWidth="20"
-                                strokeDasharray="37.7 251.2"
-                                strokeDashoffset="-213.5"
-                                transform="rotate(-90 50 50)"
-                            />
-                            {/* Center circle for donut */}
-                            <circle cx="50" cy="50" r="20" fill="white" />
-                            <text x="50" y="55" textAnchor="middle" className="text-xs font-bold fill-gray-700">
-                                100%
-                            </text>
-                        </svg>
-
-                        {/* Legend */}
-                        <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                                <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
-                                <span className="text-sm text-gray-600">货币 <span className="font-semibold">40%</span></span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="w-3 h-3 bg-purple-500 rounded-full flex-shrink-0"></div>
-                                <span className="text-sm text-gray-600">装扮 <span className="font-semibold">25%</span></span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="w-3 h-3 bg-cyan-500 rounded-full flex-shrink-0"></div>
-                                <span className="text-sm text-gray-600">服饰 <span className="font-semibold">20%</span></span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <div className="w-3 h-3 bg-yellow-400 rounded-full flex-shrink-0"></div>
-                                <span className="text-sm text-gray-600">消耗品 <span className="font-semibold">15%</span></span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 {/* 新增图表：奖励来源分布（初级/中级/高级） */}
@@ -1844,6 +1722,203 @@ const StatisticsPanel = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* 参与趋势图表 - 独立一行 */}
+            <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-bold text-gray-800">参与趋势 {selectedWheelId !== 'all' && `- ${selectedWheelId}`}</h3>
+                    <div className="flex gap-2">
+                        {[
+                            { value: '7d', label: '7天' },
+                            { value: '30d', label: '30天' },
+                            { value: '90d', label: '90天' }
+                        ].map(option => (
+                            <button
+                                key={option.value}
+                                onClick={() => setTrendTimeRange(option.value as '7d' | '30d' | '90d')}
+                                className={`px-3 py-1 text-xs rounded-full transition ${trendTimeRange === option.value
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    }`}
+                            >
+                                {option.label}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {(() => {
+                    // 不同时间范围的数据
+                    const trendData = {
+                        '7d': [
+                            { date: '01-01', count: 8420 },
+                            { date: '01-02', count: 9830 },
+                            { date: '01-03', count: 7560 },
+                            { date: '01-04', count: 12340 },
+                            { date: '01-05', count: 10580 },
+                            { date: '01-06', count: 15230 },
+                            { date: '01-07', count: 11940 }
+                        ],
+                        '30d': [
+                            { date: '12-09', count: 5420 },
+                            { date: '12-12', count: 6830 },
+                            { date: '12-15', count: 7560 },
+                            { date: '12-18', count: 9340 },
+                            { date: '12-21', count: 11580 },
+                            { date: '12-24', count: 13230 },
+                            { date: '12-27', count: 14940 },
+                            { date: '12-30', count: 12340 }
+                        ],
+                        '90d': [
+                            { date: '10-11', count: 4200 },
+                            { date: '10-31', count: 6500 },
+                            { date: '11-20', count: 8900 },
+                            { date: '12-10', count: 11200 },
+                            { date: '12-30', count: 13800 }
+                        ]
+                    };
+
+                    const data = trendData[trendTimeRange];
+                    const maxCount = Math.max(...data.map(d => d.count));
+                    const chartHeight = 240;
+                    const chartWidth = 600;
+                    const paddingX = 30;
+                    const paddingY = 20;
+
+                    // 计算SVG坐标
+                    const points = data.map((item, i) => {
+                        const x = paddingX + (i / (data.length - 1)) * (chartWidth - paddingX * 2);
+                        const y = chartHeight - paddingY - (item.count / maxCount) * (chartHeight - paddingY * 2);
+                        return { x, y, ...item };
+                    });
+
+                    // 生成路径字符串
+                    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+
+                    return (
+                        <div className="relative">
+                            <svg
+                                width="100%"
+                                height="280"
+                                viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                                preserveAspectRatio="xMidYMid meet"
+                                className="overflow-visible"
+                            >
+                                {/* Grid lines */}
+                                {[0, 0.25, 0.5, 0.75, 1].map((ratio, i) => {
+                                    const y = chartHeight - paddingY - ratio * (chartHeight - paddingY * 2);
+                                    return (
+                                        <g key={`grid-${i}`}>
+                                            <line
+                                                x1={paddingX}
+                                                y1={y}
+                                                x2={chartWidth - paddingX}
+                                                y2={y}
+                                                stroke="#e5e7eb"
+                                                strokeWidth="1"
+                                            />
+                                            <text
+                                                x={paddingX - 10}
+                                                y={y + 4}
+                                                textAnchor="end"
+                                                className="text-xs fill-gray-500"
+                                            >
+                                                {Math.round(ratio * maxCount).toLocaleString()}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
+
+                                {/* Axes */}
+                                <line
+                                    x1={paddingX}
+                                    y1={paddingY}
+                                    x2={paddingX}
+                                    y2={chartHeight - paddingY}
+                                    stroke="#d1d5db"
+                                    strokeWidth="2"
+                                />
+                                <line
+                                    x1={paddingX}
+                                    y1={chartHeight - paddingY}
+                                    x2={chartWidth - paddingX}
+                                    y2={chartHeight - paddingY}
+                                    stroke="#d1d5db"
+                                    strokeWidth="2"
+                                />
+
+                                {/* Line path with gradient */}
+                                <defs>
+                                    <linearGradient id="lineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
+                                        <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+                                    </linearGradient>
+                                </defs>
+
+                                {/* Fill under line */}
+                                <path
+                                    d={`${pathD} L ${points[points.length - 1].x} ${chartHeight - paddingY} L ${paddingX} ${chartHeight - paddingY} Z`}
+                                    fill="url(#lineGradient)"
+                                />
+
+                                {/* Line */}
+                                <path
+                                    d={pathD}
+                                    fill="none"
+                                    stroke="#3b82f6"
+                                    strokeWidth="2.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+
+                                {/* Points */}
+                                {points.map((point, i) => (
+                                    <g key={`point-${i}`} className="group">
+                                        <circle
+                                            cx={point.x}
+                                            cy={point.y}
+                                            r="4"
+                                            fill="white"
+                                            stroke="#3b82f6"
+                                            strokeWidth="2"
+                                            className="cursor-pointer hover:r-5 transition-all"
+                                        />
+                                        <text
+                                            x={point.x}
+                                            y={chartHeight - 5}
+                                            textAnchor="middle"
+                                            className="text-xs fill-gray-500"
+                                        >
+                                            {point.date}
+                                        </text>
+                                        {/* Tooltip */}
+                                        <g className="opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                            <rect
+                                                x={point.x - 35}
+                                                y={point.y - 25}
+                                                width="70"
+                                                height="20"
+                                                fill="#1f2937"
+                                                rx="4"
+                                            />
+                                            <text
+                                                x={point.x}
+                                                y={point.y - 10}
+                                                textAnchor="middle"
+                                                className="text-xs fill-white font-semibold"
+                                            >
+                                                {point.count.toLocaleString()}
+                                            </text>
+                                        </g>
+                                    </g>
+                                ))}
+                            </svg>
+                        </div>
+                    );
+                })()}
+
+                <div className="mt-4 text-xs text-gray-400 text-center">数据更新时间：{new Date().toLocaleString('zh-CN')}</div>
             </div>
 
             {showRewardModal && (() => {
@@ -2043,8 +2118,9 @@ const StatisticsPanel = () => {
                         </div>
                     </div>
                 );
-            })()}
-        </div>
+            })()
+            }
+        </div >
     )
 }
 
