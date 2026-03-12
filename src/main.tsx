@@ -145,10 +145,59 @@ const MOCK_ACTIVITIES: ActivityConfig[] = [
                 rewards: [
                     { id: 'rw_01', itemId: 'gold', itemName: '金币', count: 1000, weight: 500, isGrandPrize: false },
                     { id: 'rw_02', itemId: 'skin_01', itemName: '普通皮肤', count: 1, weight: 10, isGrandPrize: true },
+                    { id: 'rw_03', itemId: 'gold', itemName: '金币', count: 500, weight: 400, isGrandPrize: false },
+                    { id: 'rw_04', itemId: 'gold', itemName: '金币', count: 200, weight: 600, isGrandPrize: false },
+                    { id: 'rw_05', itemId: 'starbean', itemName: '星豆', count: 50, weight: 300, isGrandPrize: false },
+                    { id: 'rw_06', itemId: 'starbean', itemName: '星豆', count: 100, weight: 200, isGrandPrize: false },
+                    { id: 'rw_07', itemId: 'consumable_01', itemName: '经验药水', count: 2, weight: 350, isGrandPrize: false },
+                    { id: 'rw_08', itemId: 'consumable_02', itemName: '体力药水', count: 1, weight: 400, isGrandPrize: false },
+                    { id: 'rw_09', itemId: 'gold', itemName: '金币', count: 2000, weight: 150, isGrandPrize: false },
+                    { id: 'rw_10', itemId: 'skin_02', itemName: '头像框', count: 1, weight: 80, isGrandPrize: false },
+                    { id: 'rw_11', itemId: 'starbean', itemName: '星豆', count: 30, weight: 500, isGrandPrize: false },
+                    { id: 'rw_12', itemId: 'consumable_03', itemName: '双倍卡', count: 1, weight: 250, isGrandPrize: false },
+                    { id: 'rw_13', itemId: 'gold', itemName: '金币', count: 800, weight: 450, isGrandPrize: false },
+                    { id: 'rw_14', itemId: 'item_9999', itemName: '升级道具', count: 1, weight: 100, isGrandPrize: false },
+                    { id: 'rw_15', itemId: 'starbean', itemName: '星豆', count: 200, weight: 100, isGrandPrize: false },
                 ]
             },
-            intermediate: INITIAL_WHEEL_CONFIG('intermediate', '中级转盘', 12),
-            advanced: INITIAL_WHEEL_CONFIG('advanced', '高级转盘', 10),
+            intermediate: {
+                type: 'intermediate',
+                name: '中级转盘',
+                maxRewards: 12,
+                grandPrizeId: 'rw_m02',
+                rewards: [
+                    { id: 'rw_m01', itemId: 'gold', itemName: '金币', count: 3000, weight: 400, isGrandPrize: false },
+                    { id: 'rw_m02', itemId: 'skin_03', itemName: '稀有皮肤', count: 1, weight: 15, isGrandPrize: true },
+                    { id: 'rw_m03', itemId: 'starbean', itemName: '星豆', count: 200, weight: 300, isGrandPrize: false },
+                    { id: 'rw_m04', itemId: 'gold', itemName: '金币', count: 5000, weight: 200, isGrandPrize: false },
+                    { id: 'rw_m05', itemId: 'consumable_01', itemName: '经验药水', count: 5, weight: 250, isGrandPrize: false },
+                    { id: 'rw_m06', itemId: 'starbean', itemName: '星豆', count: 500, weight: 150, isGrandPrize: false },
+                    { id: 'rw_m07', itemId: 'skin_04', itemName: '聊天气泡', count: 1, weight: 100, isGrandPrize: false },
+                    { id: 'rw_m08', itemId: 'gold', itemName: '金币', count: 1500, weight: 450, isGrandPrize: false },
+                    { id: 'rw_m09', itemId: 'consumable_02', itemName: '体力药水', count: 3, weight: 350, isGrandPrize: false },
+                    { id: 'rw_m10', itemId: 'starbean', itemName: '星豆', count: 100, weight: 400, isGrandPrize: false },
+                    { id: 'rw_m11', itemId: 'item_9999', itemName: '升级道具', count: 1, weight: 80, isGrandPrize: false },
+                    { id: 'rw_m12', itemId: 'consumable_03', itemName: '双倍卡', count: 2, weight: 200, isGrandPrize: false },
+                ]
+            },
+            advanced: {
+                type: 'advanced',
+                name: '高级转盘',
+                maxRewards: 10,
+                grandPrizeId: 'rw_a02',
+                rewards: [
+                    { id: 'rw_a01', itemId: 'gold', itemName: '金币', count: 10000, weight: 300, isGrandPrize: false },
+                    { id: 'rw_a02', itemId: 'skin_05', itemName: '传奇服饰', count: 1, weight: 5, isGrandPrize: true },
+                    { id: 'rw_a03', itemId: 'starbean', itemName: '星豆', count: 1000, weight: 200, isGrandPrize: false },
+                    { id: 'rw_a04', itemId: 'skin_06', itemName: '史诗头像框', count: 1, weight: 30, isGrandPrize: false },
+                    { id: 'rw_a05', itemId: 'gold', itemName: '金币', count: 20000, weight: 150, isGrandPrize: false },
+                    { id: 'rw_a06', itemId: 'consumable_01', itemName: '经验药水', count: 10, weight: 250, isGrandPrize: false },
+                    { id: 'rw_a07', itemId: 'starbean', itemName: '星豆', count: 500, weight: 300, isGrandPrize: false },
+                    { id: 'rw_a08', itemId: 'skin_07', itemName: '稀有聊天气泡', count: 1, weight: 50, isGrandPrize: false },
+                    { id: 'rw_a09', itemId: 'gold', itemName: '金币', count: 5000, weight: 400, isGrandPrize: false },
+                    { id: 'rw_a10', itemId: 'consumable_03', itemName: '双倍卡', count: 5, weight: 200, isGrandPrize: false },
+                ]
+            },
         }
     },
     {
@@ -703,7 +752,7 @@ const ActivityList = ({ onEdit, onCreate, showToast }: { onEdit: (act: ActivityC
 };
 
 // WheelEditor Component
-const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig) => void; isReadOnly?: boolean }> = ({ wheel, onChange, isReadOnly = false }) => {
+const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig) => void; isReadOnly?: boolean; upgradeItemId?: string }> = ({ wheel, onChange, isReadOnly = false, upgradeItemId = '' }) => {
     // 确保大奖始终排在第一位
     const sortedRewards = [...wheel.rewards].sort((a, b) => {
         if (a.id === wheel.grandPrizeId) return -1;
@@ -737,10 +786,10 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
     const addUpgradeReward = () => {
         if (wheel.rewards.length >= wheel.maxRewards) return;
         // 从通用配置中获取升级道具ID
-        const upgradeItemId = 'item_9999'; // 这里应该从全局配置获取，暂时硬编码
+        const resolvedUpgradeItemId = upgradeItemId || 'item_9999';
         const newReward: RewardConfig = {
             id: `upgrade_${Date.now()}`,
-            itemId: upgradeItemId,
+            itemId: resolvedUpgradeItemId,
             itemName: '转盘升级券',
             count: 1,
             weight: 50,
@@ -788,7 +837,10 @@ const WheelEditor: React.FC<{ wheel: WheelConfig; onChange: (wheel: WheelConfig)
         <div className="space-y-4">
             <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
                 <div className="text-sm text-gray-600">
-                    奖励数量: <span className="font-bold text-gray-900">{wheel.rewards.length}</span> / {wheel.maxRewards}
+                    奖励数量: <span className={`font-bold ${wheel.rewards.length === wheel.maxRewards ? 'text-green-600' : 'text-red-600'}`}>{wheel.rewards.length}</span> / {wheel.maxRewards}
+                    {wheel.rewards.length !== wheel.maxRewards && (
+                        <span className="text-red-500 text-xs ml-2">（必须恰好{wheel.maxRewards}个）</span>
+                    )}
                 </div>
                 <div className="flex items-center gap-4">
                     <div className="text-sm text-gray-600 flex items-center gap-2">
@@ -1163,6 +1215,7 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast, isReadOnly =
                             wheels: { ...data.wheels, [activeTab]: updatedWheel }
                         })}
                         isReadOnly={isReadOnly}
+                        upgradeItemId={MOCK_GENERAL_CONFIG.upgradeItemId}
                     />
                 </div>
             </div>
@@ -1176,6 +1229,24 @@ const ActivityEditor = ({ initialData, onSave, onCancel, showToast, isReadOnly =
 const DataQueryPanel = () => {
     const [showRewardModal, setShowRewardModal] = useState<{ drawId: string; rewards: Array<{ rewardName: string; rewardCount: number }> } | null>(null);
     const [selectedUserData, setSelectedUserData] = useState<string | null>(null);
+    const [filterUserId, setFilterUserId] = useState('');
+    const [filterItemId, setFilterItemId] = useState('');
+    const [filterDrawType, setFilterDrawType] = useState<'all' | 'single' | 'ten'>('all');
+    const [filterStatus, setFilterStatus] = useState<'all' | 'success' | 'failed'>('all');
+
+    // 筛选记录
+    const filteredRecords = MOCK_DRAW_RECORDS.filter(r => {
+        if (filterUserId && !r.userId.toLowerCase().includes(filterUserId.toLowerCase())) return false;
+        if (filterDrawType !== 'all' && r.drawType !== filterDrawType) return false;
+        if (filterStatus !== 'all' && r.status !== filterStatus) return false;
+        if (filterItemId) {
+            const itemMatch = r.rewardName.toLowerCase().includes(filterItemId.toLowerCase()) ||
+                r.rewardId.toLowerCase().includes(filterItemId.toLowerCase()) ||
+                (r.rewards && r.rewards.some(rew => rew.rewardName.toLowerCase().includes(filterItemId.toLowerCase())));
+            if (!itemMatch) return false;
+        }
+        return true;
+    });
 
     // 计算玩家聚合数据
     const getUserStats = (userId: string) => {
@@ -1208,10 +1279,14 @@ const DataQueryPanel = () => {
                     <Search size={20} className="text-blue-600" />
                     数据查询
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
                     <div>
                         <label className="block text-xs font-semibold text-gray-500 mb-1">玩家ID</label>
-                        <input type="text" placeholder="输入ID精确查找" className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                        <input type="text" placeholder="输入ID精确查找" value={filterUserId} onChange={e => setFilterUserId(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">道具ID/名称</label>
+                        <input type="text" placeholder="输入道具ID或名称" value={filterItemId} onChange={e => setFilterItemId(e.target.value)} className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
                     </div>
                     <div>
                         <label className="block text-xs font-semibold text-gray-500 mb-1">日期范围</label>
@@ -1219,10 +1294,18 @@ const DataQueryPanel = () => {
                     </div>
                     <div>
                         <label className="block text-xs font-semibold text-gray-500 mb-1">抽奖类型</label>
-                        <select className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                        <select value={filterDrawType} onChange={e => setFilterDrawType(e.target.value as any)} className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                             <option value="all">全部</option>
                             <option value="single">单抽</option>
                             <option value="ten">十连抽</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-xs font-semibold text-gray-500 mb-1">状态</label>
+                        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as any)} className="w-full px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                            <option value="all">全部</option>
+                            <option value="success">成功</option>
+                            <option value="failed">失败</option>
                         </select>
                     </div>
                     <div className="flex items-end">
@@ -1241,12 +1324,13 @@ const DataQueryPanel = () => {
                             <th className="px-6 py-3 font-semibold text-gray-500">玩家ID</th>
                             <th className="px-6 py-3 font-semibold text-gray-500">时间</th>
                             <th className="px-6 py-3 font-semibold text-gray-500">类型</th>
+                            <th className="px-6 py-3 font-semibold text-gray-500">消耗星盘券</th>
                             <th className="px-6 py-3 font-semibold text-gray-500">获得奖励</th>
                             <th className="px-6 py-3 font-semibold text-gray-500">状态</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
-                        {MOCK_DRAW_RECORDS.map(record => (
+                        {filteredRecords.map(record => (
                             <tr key={record.id} className="hover:bg-gray-50">
                                 <td className="px-6 py-3 font-mono text-xs text-gray-400">{record.id}</td>
                                 <td className="px-6 py-3">
@@ -1263,6 +1347,7 @@ const DataQueryPanel = () => {
                                         {record.drawType === 'ten' ? '十连抽' : '单抽'}
                                     </span>
                                 </td>
+                                <td className="px-6 py-3 text-gray-600">{record.cost}</td>
                                 <td className="px-6 py-3">
                                     {record.drawType === 'ten' && record.rewards ? (
                                         <button
@@ -1291,7 +1376,7 @@ const DataQueryPanel = () => {
                     </tbody>
                 </table>
                 <div className="p-4 border-t border-gray-100 flex justify-between items-center text-sm text-gray-500">
-                    <span>显示 1-20 条，共 1240 条</span>
+                    <span>显示 1-{filteredRecords.length} 条，共 {filteredRecords.length} 条</span>
                     <div className="flex gap-2">
                         <button className="px-3 py-1 border rounded hover:bg-gray-50">上一页</button>
                         <button className="px-3 py-1 border rounded hover:bg-gray-50">下一页</button>
@@ -2147,8 +2232,20 @@ export default function App() {
         setIsCreating(true);
     };
 
-    const handleSaveActivity = (_act: ActivityConfig) => {
-        // Save logic mock
+    const handleSaveActivity = (act: ActivityConfig) => {
+        // 校验各转盘奖励数量必须精确匹配
+        const wheelChecks = [
+            { key: 'beginner', name: '初级转盘', required: 15 },
+            { key: 'intermediate', name: '中级转盘', required: 12 },
+            { key: 'advanced', name: '高级转盘', required: 10 },
+        ] as const;
+        for (const check of wheelChecks) {
+            const actual = act.wheels[check.key].rewards.length;
+            if (actual !== check.required) {
+                showToast(`${check.name}奖励数量必须为${check.required}个，当前为${actual}个`, 'error');
+                return;
+            }
+        }
         showToast(isCreating ? "轮盘创建成功" : "轮盘配置已更新", "success");
         setEditingActivity(null);
         setIsCreating(false);
